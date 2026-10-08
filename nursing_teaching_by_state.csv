@@ -1,0 +1,241 @@
+course,state,year,applications,offers
+Nursing,NSW,2011,6751,5138
+Nursing,NSW,2012,7239,5466
+Nursing,NSW,2013,7679,5833
+Nursing,NSW,2014,9203,6520
+Nursing,NSW,2015,9763,7241
+Nursing,NSW,2016,10263,7647
+Nursing,NSW,2017,10331,7387
+Nursing,NSW,2018,10108,7005
+Nursing,NSW,2019,9799,7442
+Nursing,NSW,2020,10704,8308
+Nursing,NSW,2021,11688,8867
+Nursing,NSW,2022,9802,7587
+Nursing,NSW,2023,8303,7029
+Nursing,NSW,2024,8334,7067
+Nursing,NSW,2025,8158,6826
+Nursing,VIC,2011,6874,4269
+Nursing,VIC,2012,6396,4606
+Nursing,VIC,2013,6260,4623
+Nursing,VIC,2014,7012,5170
+Nursing,VIC,2015,7702,5682
+Nursing,VIC,2016,8919,6565
+Nursing,VIC,2017,9197,6255
+Nursing,VIC,2018,9430,6749
+Nursing,VIC,2019,9578,6269
+Nursing,VIC,2020,9379,5792
+Nursing,VIC,2021,10490,5658
+Nursing,VIC,2022,9498,5756
+Nursing,VIC,2023,9544,5927
+Nursing,VIC,2024,9109,6103
+Nursing,VIC,2025,9392,6064
+Nursing,QLD,2011,5494,4463
+Nursing,QLD,2012,5593,4732
+Nursing,QLD,2013,5635,4849
+Nursing,QLD,2014,5317,4735
+Nursing,QLD,2015,6473,5789
+Nursing,QLD,2016,7810,6642
+Nursing,QLD,2017,8321,6740
+Nursing,QLD,2018,8486,6969
+Nursing,QLD,2019,8037,6403
+Nursing,QLD,2020,7730,6519
+Nursing,QLD,2021,10869,8283
+Nursing,QLD,2022,7707,6037
+Nursing,QLD,2023,7046,5836
+Nursing,QLD,2024,6508,5679
+Nursing,QLD,2025,7025,5944
+Nursing,WA,2011,1774,1472
+Nursing,WA,2012,1765,1134
+Nursing,WA,2013,1790,1443
+Nursing,WA,2014,1931,1527
+Nursing,WA,2015,2183,1766
+Nursing,WA,2016,2773,2214
+Nursing,WA,2017,2943,2111
+Nursing,WA,2018,3144,2091
+Nursing,WA,2019,3179,1929
+Nursing,WA,2020,3094,1973
+Nursing,WA,2021,4126,1903
+Nursing,WA,2022,3474,1888
+Nursing,WA,2023,3659,2443
+Nursing,WA,2024,3540,2432
+Nursing,WA,2025,3735,2477
+Nursing,SA,2011,1974,1554
+Nursing,SA,2012,2155,1778
+Nursing,SA,2013,2247,1895
+Nursing,SA,2014,2376,1826
+Nursing,SA,2015,2944,2277
+Nursing,SA,2016,2935,2255
+Nursing,SA,2017,2869,2182
+Nursing,SA,2018,3005,2271
+Nursing,SA,2019,3156,2361
+Nursing,SA,2020,3253,2397
+Nursing,SA,2021,3531,2580
+Nursing,SA,2022,2978,2202
+Nursing,SA,2023,2713,2080
+Nursing,SA,2024,2624,2113
+Nursing,SA,2025,2407,2034
+Nursing,TAS,2011,791,480
+Nursing,TAS,2012,685,536
+Nursing,TAS,2013,637,524
+Nursing,TAS,2014,850,628
+Nursing,TAS,2015,923,727
+Nursing,TAS,2016,1043,779
+Nursing,TAS,2017,1114,758
+Nursing,TAS,2018,1285,849
+Nursing,TAS,2019,1223,882
+Nursing,TAS,2020,1190,887
+Nursing,TAS,2021,1932,1422
+Nursing,TAS,2022,1155,823
+Nursing,TAS,2023,1014,671
+Nursing,TAS,2024,1113,774
+Nursing,TAS,2025,1208,777
+Nursing,ACT,2011,297,221
+Nursing,ACT,2012,400,314
+Nursing,ACT,2013,420,348
+Nursing,ACT,2014,477,365
+Nursing,ACT,2015,435,334
+Nursing,ACT,2016,486,379
+Nursing,ACT,2017,521,415
+Nursing,ACT,2018,509,395
+Nursing,ACT,2019,533,446
+Nursing,ACT,2020,619,502
+Nursing,ACT,2021,718,460
+Nursing,ACT,2022,683,517
+Nursing,ACT,2023,512,437
+Nursing,ACT,2024,508,442
+Nursing,ACT,2025,507,402
+Nursing,NT,2011,222,163
+Nursing,NT,2012,322,260
+Nursing,NT,2013,273,195
+Nursing,NT,2014,317,191
+Nursing,NT,2015,389,257
+Nursing,NT,2016,406,257
+Nursing,NT,2017,501,342
+Nursing,NT,2018,441,298
+Nursing,NT,2019,443,324
+Nursing,NT,2020,406,309
+Nursing,NT,2021,432,273
+Nursing,NT,2022,315,185
+Nursing,NT,2023,382,238
+Nursing,NT,2024,335,227
+Nursing,NT,2025,381,275
+Initial Teacher Education,NSW,2011,10577,8387
+Initial Teacher Education,NSW,2012,10969,9062
+Initial Teacher Education,NSW,2013,10647,8497
+Initial Teacher Education,NSW,2014,10092,8237
+Initial Teacher Education,NSW,2015,9484,8103
+Initial Teacher Education,NSW,2016,8302,6825
+Initial Teacher Education,NSW,2017,8204,6978
+Initial Teacher Education,NSW,2018,7748,6591
+Initial Teacher Education,NSW,2019,7033,5975
+Initial Teacher Education,NSW,2020,7454,6322
+Initial Teacher Education,NSW,2021,7440,6099
+Initial Teacher Education,NSW,2022,8225,7038
+Initial Teacher Education,NSW,2023,7453,6245
+Initial Teacher Education,NSW,2024,7380,6327
+Initial Teacher Education,NSW,2025,9135,7936
+Initial Teacher Education,VIC,2011,6257,4629
+Initial Teacher Education,VIC,2012,6741,5416
+Initial Teacher Education,VIC,2013,6974,5782
+Initial Teacher Education,VIC,2014,6783,5663
+Initial Teacher Education,VIC,2015,7037,5849
+Initial Teacher Education,VIC,2016,7470,6144
+Initial Teacher Education,VIC,2017,7414,5698
+Initial Teacher Education,VIC,2018,6205,4206
+Initial Teacher Education,VIC,2019,6394,4010
+Initial Teacher Education,VIC,2020,5756,3541
+Initial Teacher Education,VIC,2021,5792,3730
+Initial Teacher Education,VIC,2022,6510,5033
+Initial Teacher Education,VIC,2023,6163,4927
+Initial Teacher Education,VIC,2024,6059,4699
+Initial Teacher Education,VIC,2025,6344,4664
+Initial Teacher Education,QLD,2011,5140,4387
+Initial Teacher Education,QLD,2012,5238,4461
+Initial Teacher Education,QLD,2013,5083,4414
+Initial Teacher Education,QLD,2014,5049,4567
+Initial Teacher Education,QLD,2015,5177,4730
+Initial Teacher Education,QLD,2016,4719,3773
+Initial Teacher Education,QLD,2017,5357,4268
+Initial Teacher Education,QLD,2018,4839,3781
+Initial Teacher Education,QLD,2019,5511,4454
+Initial Teacher Education,QLD,2020,5869,4737
+Initial Teacher Education,QLD,2021,5790,4401
+Initial Teacher Education,QLD,2022,5492,4539
+Initial Teacher Education,QLD,2023,5209,4068
+Initial Teacher Education,QLD,2024,4782,3899
+Initial Teacher Education,QLD,2025,5346,4540
+Initial Teacher Education,WA,2011,2477,2087
+Initial Teacher Education,WA,2012,2460,1605
+Initial Teacher Education,WA,2013,2576,2131
+Initial Teacher Education,WA,2014,2487,2085
+Initial Teacher Education,WA,2015,2327,1966
+Initial Teacher Education,WA,2016,2579,2167
+Initial Teacher Education,WA,2017,2946,2409
+Initial Teacher Education,WA,2018,2765,2263
+Initial Teacher Education,WA,2019,2667,2089
+Initial Teacher Education,WA,2020,2701,2115
+Initial Teacher Education,WA,2021,3005,2310
+Initial Teacher Education,WA,2022,3037,2265
+Initial Teacher Education,WA,2023,2869,2297
+Initial Teacher Education,WA,2024,2485,2082
+Initial Teacher Education,WA,2025,2509,2143
+Initial Teacher Education,SA,2011,2459,1851
+Initial Teacher Education,SA,2012,2711,2035
+Initial Teacher Education,SA,2013,2736,2121
+Initial Teacher Education,SA,2014,2895,2150
+Initial Teacher Education,SA,2015,2940,2218
+Initial Teacher Education,SA,2016,2765,2107
+Initial Teacher Education,SA,2017,2591,2046
+Initial Teacher Education,SA,2018,2448,1951
+Initial Teacher Education,SA,2019,2091,1738
+Initial Teacher Education,SA,2020,1840,1499
+Initial Teacher Education,SA,2021,1692,1394
+Initial Teacher Education,SA,2022,2146,1838
+Initial Teacher Education,SA,2023,1602,1314
+Initial Teacher Education,SA,2024,1577,1299
+Initial Teacher Education,SA,2025,1716,1497
+Initial Teacher Education,TAS,2011,793,775
+Initial Teacher Education,TAS,2012,767,708
+Initial Teacher Education,TAS,2013,729,664
+Initial Teacher Education,TAS,2014,659,587
+Initial Teacher Education,TAS,2015,567,539
+Initial Teacher Education,TAS,2016,523,487
+Initial Teacher Education,TAS,2017,440,345
+Initial Teacher Education,TAS,2018,534,390
+Initial Teacher Education,TAS,2019,486,350
+Initial Teacher Education,TAS,2020,501,393
+Initial Teacher Education,TAS,2021,485,385
+Initial Teacher Education,TAS,2022,494,344
+Initial Teacher Education,TAS,2023,516,377
+Initial Teacher Education,TAS,2024,484,380
+Initial Teacher Education,TAS,2025,523,385
+Initial Teacher Education,ACT,2011,490,444
+Initial Teacher Education,ACT,2012,466,417
+Initial Teacher Education,ACT,2013,546,501
+Initial Teacher Education,ACT,2014,521,482
+Initial Teacher Education,ACT,2015,490,433
+Initial Teacher Education,ACT,2016,504,474
+Initial Teacher Education,ACT,2017,443,392
+Initial Teacher Education,ACT,2018,476,431
+Initial Teacher Education,ACT,2019,511,474
+Initial Teacher Education,ACT,2020,460,433
+Initial Teacher Education,ACT,2021,494,433
+Initial Teacher Education,ACT,2022,434,401
+Initial Teacher Education,ACT,2023,405,374
+Initial Teacher Education,ACT,2024,445,396
+Initial Teacher Education,ACT,2025,478,400
+Initial Teacher Education,NT,2011,237,185
+Initial Teacher Education,NT,2012,284,229
+Initial Teacher Education,NT,2013,245,180
+Initial Teacher Education,NT,2014,247,168
+Initial Teacher Education,NT,2015,301,234
+Initial Teacher Education,NT,2016,284,206
+Initial Teacher Education,NT,2017,293,210
+Initial Teacher Education,NT,2018,239,176
+Initial Teacher Education,NT,2019,189,147
+Initial Teacher Education,NT,2020,223,172
+Initial Teacher Education,NT,2021,203,159
+Initial Teacher Education,NT,2022,218,178
+Initial Teacher Education,NT,2023,178,155
+Initial Teacher Education,NT,2024,148,121
+Initial Teacher Education,NT,2025,175,154

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>University Student Recruitment Insights — Arzoo</title>
+<meta name="description" content="Higher education demand analysis using Australian Government data, plus a student recruitment campaign analytics case study.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#FBFAF7;--text:#22272E;--muted:#626B76;--faint:#949BA4;--rule:#E4E1DA;--rule-strong:#22272E;
+  --petrol:#0F5C73;--petrol-2:#3E8AA0;--pale:#C9DDE3;--gold:#D49A1E;--rust:#D9573B;--sage:#3E8E5E;--plum:#7A4C8F;--sky:#3D8FC6;--teal:#24A39A;--rose:#C2416B;
+  --sans:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;--serif:"Source Serif 4",Georgia,"Times New Roman",serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="dark"]){--bg:#FBFAF7}}
+:root[data-theme="light"]{--bg:#FBFAF7}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.55;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:var(--petrol)}
+:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+h1,h2,h3{margin:0;font-weight:600}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(1.1rem,3.5vw,2.25rem)}
+body::before{content:"";display:block;height:6px;background:linear-gradient(90deg,var(--petrol) 0 18%,var(--teal) 18% 34%,var(--sky) 34% 50%,var(--gold) 50% 66%,var(--rust) 66% 82%,var(--plum) 82% 100%)}
+header{padding:2.6rem 0 0}
+header .kicker{display:inline-block;font-size:.85rem;color:#fff;background:var(--petrol);font-weight:500;margin:0 0 .8rem;padding:.2rem .6rem;border-radius:3px}
+header h1{font-family:var(--serif);font-size:clamp(2rem,4.4vw,3.1rem);line-height:1.08;letter-spacing:-.015em;max-width:20ch}
+header .dek{font-size:1.08rem;color:var(--muted);max-width:62ch;margin:.9rem 0 0}
+header .byline{font-size:.85rem;color:var(--faint);margin:1rem 0 0}
+.tabs{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--rule);margin-top:2rem}
+.tabs .wrap{display:flex;gap:1.6rem;overflow-x:auto}
+.tabs button{flex:none;font:500 .94rem var(--sans);color:var(--muted);background:none;border:0;border-bottom:2px solid transparent;padding:.9rem 0 .75rem;cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--petrol);border-bottom:3px solid var(--petrol)}
+.tabs button:hover{color:var(--text)}
+main{padding:2.25rem 0 1rem}
+[role=tabpanel][hidden]{display:none}
+h2.sec{font-family:var(--serif);font-size:1.45rem;letter-spacing:-.01em;margin:0 0 .3rem;color:var(--petrol)}
+p.lede{color:var(--muted);margin:0 0 1.5rem;max-width:70ch}
+.figs{display:grid;gap:2.5rem 3rem;margin:0 0 3rem}
+.c2{grid-template-columns:repeat(2,minmax(0,1fr))}.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.fig{margin:0;min-width:0;border-top:3px solid var(--petrol);padding-top:.9rem}
+.figs > :nth-child(6n+2){border-top-color:var(--teal)}.figs > :nth-child(6n+3){border-top-color:var(--gold)}.figs > :nth-child(6n+4){border-top-color:var(--rust)}.figs > :nth-child(6n+5){border-top-color:var(--plum)}.figs > :nth-child(6n+6){border-top-color:var(--sky)}
+.fig h3{font-size:1rem}
+.fig figcaption p{margin:.15rem 0 1rem;font-size:.87rem;color:var(--muted)}
+.chart{position:relative;height:290px}.chart.tall{height:340px}
+.src{margin:.6rem 0 0;font-size:.78rem;color:var(--faint)}
+.src.sim::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-right:.4rem;vertical-align:0}
+.figs-note{font-size:.88rem;color:var(--muted);margin:.8rem 0 0}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:0;border-bottom:1px solid var(--rule);margin:0 0 3rem}
+.num{padding:1.1rem 1.25rem 1.15rem 0;border-top:4px solid var(--petrol)}
+.num:nth-child(2){border-top-color:var(--teal)}.num:nth-child(3){border-top-color:var(--gold)}.num:nth-child(4){border-top-color:var(--rust)}
+.num:nth-child(1) .v{color:var(--petrol)}.num:nth-child(2) .v{color:var(--teal)}.num:nth-child(3) .v{color:#B07C10}.num:nth-child(4) .v{color:var(--rust)}
+.num + .num{padding-left:1.25rem;border-left:1px solid var(--rule)}
+.num .l{font-size:.84rem;color:var(--muted)}
+.num .v{font-family:var(--serif);font-size:2.3rem;font-weight:600;line-height:1.15;margin:.15rem 0}
+.num .d{font-size:.84rem}
+.up{color:var(--sage)}.down{color:var(--rust)}.flat{color:var(--muted)}
+.findings{list-style:none;margin:0 0 3rem;padding:0;columns:2;column-gap:3rem}
+.findings li{break-inside:avoid;padding:1rem 0 1.1rem 1rem;border-left:3px solid var(--petrol);margin-bottom:1rem;background:linear-gradient(90deg,rgba(15,92,115,.06),transparent 60%)}
+.findings li.sim{border-left-color:var(--gold);background:linear-gradient(90deg,rgba(212,154,30,.08),transparent 60%)}
+.findings .who{font-size:.8rem;color:var(--petrol);font-weight:500}
+.findings .who.sim{color:#A9760D}
+.findings h3{font-size:1.02rem;margin:.2rem 0 .3rem}
+.findings p{margin:0;font-size:.92rem;color:var(--muted)}
+.note{font-size:.9rem;color:var(--muted);font-style:italic;margin:0 0 2rem;padding-left:.9rem;border-left:2px solid var(--gold)}
+.note.real{border-left-color:var(--petrol)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+th{text-align:left;font-weight:500;font-size:.8rem;color:var(--muted);padding:.5rem .6rem .5rem 0;border-bottom:1px solid var(--rule-strong);white-space:nowrap}
+td{padding:.6rem .6rem .6rem 0;border-bottom:1px solid var(--rule)}
+td.n,th.n{text-align:right}
+td.good{color:var(--sage);font-weight:600}td.bad{color:var(--rust);font-weight:600}
+.tbl{margin:0 0 3rem;border-top:3px solid var(--sky);padding-top:.9rem}
+.tbl h3{font-size:1rem}.tbl > p{margin:.15rem 0 .8rem;font-size:.87rem;color:var(--muted)}
+.sev{font-size:.8rem;font-weight:500;text-transform:capitalize}
+.sev.high{color:var(--rust)}.sev.medium{color:var(--gold)}.sev.low{color:var(--sage)}
+.ab{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:.4rem 0 1rem}
+.ab .l{font-size:.82rem;color:var(--muted)}
+.ab h4{margin:.15rem 0 .2rem;font-size:1rem;font-weight:600}
+.ab .v{font-family:var(--serif);font-size:2.4rem;font-weight:600;line-height:1.1}
+.ab .win .v{color:var(--sage)}
+.ab small{color:var(--muted)}
+.inline{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;font-size:.9rem;padding:.8rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.inline b{font-weight:600}
+.mini{display:flex;flex-wrap:wrap;gap:.3rem 1.6rem;font-size:.88rem;margin:-.4rem 0 1rem;color:var(--muted)}
+.mini b{color:var(--text);font-weight:600}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:.45rem 1.2rem;margin:0;font-size:.9rem}
+dt{font-weight:600}dd{margin:0;color:var(--muted)}
+footer{border-top:1px solid var(--rule);margin-top:1rem}
+footer .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-top:1.2rem;padding-bottom:1.6rem;font-size:.82rem;color:var(--faint)}
+@media (max-width:980px){.c2,.c3{grid-template-columns:1fr}.findings{columns:1}.nums{grid-template-columns:1fr 1fr}.num:nth-child(3){padding-left:0;border-left:0}.num:nth-child(n+3){border-top:1px solid var(--rule)}}
+@media (max-width:520px){.num .v{font-size:1.8rem}dl{grid-template-columns:1fr}.ab{gap:1rem}}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <p class="kicker">Marketing analytics case study</p>
+  <h1>Where university demand is moving, and what a campaign can do about it</h1>
+  <p class="dek">Real Australian Government data on undergraduate applications, combined with a simulated student recruitment campaign for a Perth university. Campaign figures are marked with a gold dot.</p>
+  <p class="byline">Arzoo · Data analysis in Python and pandas · 2026</p>
+</header>
+<nav class="tabs"><div class="wrap" role="tablist" id="tabs"></div></nav>
+<main class="wrap">
+
+<section role="tabpanel" id="p-overview" data-label="Summary">
+  <div class="nums" id="mkpis"></div>
+  <h2 class="sec">Findings</h2>
+  <p class="lede">Each finding is calculated from the data, not written by hand.</p>
+  <ul class="findings" id="insights"></ul>
+  <div class="figs c2">
+    <figure class="fig"><figcaption><h3>Applicants and offers, 2010–2025</h3><p>Australia, unique domestic applicants</p></figcaption><div class="chart "><canvas id="cNat"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+    <figure class="fig"><figcaption><h3>Applications follow the job market</h3><p>Annual change in applications against the prior year's change in unemployment</p></figcaption><div class="chart "><canvas id="cCycle"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+  </div>
+</section>
+
+<section role="tabpanel" id="p-market" data-label="Course demand" hidden>
+  <h2 class="sec">Course demand</h2>
+  <p class="lede">Which fields attract the most applicants, which are growing, and who receives the offers.</p>
+  <div class="figs c2">
+    <figure class="fig"><figcaption><h3>Offers by field of education, 2025</h3><p>Most recent offer per applicant; each field keeps its colour across charts</p></figcaption><div class="chart tall"><canvas id="cFields"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+    <figure class="fig"><figcaption><h3>Who receives offers</h3><p>Share of 2025 offers by applicant type</p></figcaption><div class="chart tall"><canvas id="cAtar"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+  </div>
+  <div class="figs c3">
+    <figure class="fig"><figcaption><h3>Fastest-growing fields</h3><p>Change in applications, 2024 to 2025</p></figcaption><div class="chart "><canvas id="cGrowth"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+    <figure class="fig"><figcaption><h3>Applications by state</h3><p>Change, 2024 to 2025</p></figcaption><div class="chart "><canvas id="cStates"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+    <figure class="fig"><figcaption><h3>Year 12 propensity to apply</h3><p>Share of Year 12 students who apply</p></figcaption><div class="chart "><canvas id="cProp"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+  </div>
+</section>
+
+<section role="tabpanel" id="p-wa" data-label="Western Australia" hidden>
+  <h2 class="sec">Western Australia</h2>
+  <p class="lede">The report breaks down Nursing and Teaching by state, so these are the two markets where WA can be compared directly with the nation. Applications indexed to 2011 = 100.</p>
+  <div class="figs c2" id="waGrid"></div>
+</section>
+
+<section role="tabpanel" id="p-campaign" data-label="Campaign" hidden>
+  <h2 class="sec">Campaign performance</h2>
+  <p class="note">Universities don't publish campaign data, so this section uses simulated exports for a fictional Perth university's 12-week intake campaign.</p>
+  <div class="nums" id="ckpis"></div>
+  <div class="tbl"><h3>Channel performance</h3><p>Lowest paid cost per application in green, highest in red</p><div class="scroll"><table id="tChannels"></table></div><p class="src sim">Simulated campaign data</p></div>
+  <div class="figs c3">
+    <figure class="fig"><figcaption><h3>Cost per application</h3><p>Paid channels, AUD</p></figcaption><div class="chart "><canvas id="cCpa"></canvas></div><p class="src sim">Simulated campaign data</p></figure>
+    <figure class="fig"><figcaption><h3>Cost per lead by week</h3><p>Paid Social climbs steadily: ad fatigue</p></figcaption><div class="chart "><canvas id="cCpl"></canvas></div><p class="src sim">Simulated campaign data</p></figure>
+    <figure class="fig"><figcaption><h3>Enquiry to enrolment</h3><p>De-duplicated CRM records</p></figcaption><div class="chart "><canvas id="cFunnel"></canvas></div><p class="src sim">Simulated campaign data</p></figure>
+  </div>
+</section>
+
+<section role="tabpanel" id="p-email" data-label="Email and testing" hidden>
+  <h2 class="sec">Email automation and testing</h2>
+  <p class="note">Simulated marketing automation and A/B test data.</p>
+  <div class="tbl"><h3>Automation journeys</h3><p>Rates on delivered emails; click-to-open is clicks divided by opens</p><div class="scroll"><table id="tEmail"></table></div><p class="src sim">Simulated campaign data</p></div>
+  <div class="figs c2">
+    <figure class="fig"><figcaption><h3>Email click rate by week</h3><p>Personalised content introduced from week 7</p></figcaption><div class="chart "><canvas id="cEmail"></canvas></div><p class="src sim">Simulated campaign data</p></figure>
+    <figure class="fig"><figcaption><h3>A/B test: course page call to action</h3><p>28 days, traffic split evenly</p></figcaption>
+      <div class="ab" id="variants"></div><div class="inline" id="abStats"></div><p class="figs-note" id="abVerdict"></p><p class="src sim">Simulated campaign data</p></figure>
+  </div>
+  <div class="figs"><figure class="fig"><figcaption><h3>Cumulative conversion rate</h3><p>The gap settles once enough visitors arrive</p></figcaption><div class="chart "><canvas id="cAb"></canvas></div><p class="src sim">Simulated campaign data</p></figure></div>
+</section>
+
+<section role="tabpanel" id="p-quality" data-label="Data quality" hidden>
+  <h2 class="sec">Data quality and definitions</h2>
+  <p class="lede">Checks run on every refresh before any number is reported.</p>
+  <div class="tbl"><h3>Integrity checks</h3><p>Real sector data and simulated campaign exports</p><div class="scroll"><table id="tAudit"></table></div></div>
+  <div class="figs c2">
+    <figure class="fig"><figcaption><h3>Web analytics vs CRM enquiries</h3><p>After de-duplication, by channel</p></figcaption><div class="chart "><canvas id="cRecon"></canvas></div><p class="src sim">Simulated campaign data</p></figure>
+    <div class="fig"><h3>Metric definitions</h3><p style="margin:.15rem 0 1rem;font-size:.87rem;color:var(--muted)">One definition per metric, used everywhere</p>
+      <dl>
+        <dt>Applicant</dt><dd>Unique domestic person applying for a first-semester undergraduate place</dd>
+        <dt>Offer rate</dt><dd>Applicants with an offer ÷ applicants</dd>
+        <dt>Lead</dt><dd>Unique CRM enquiry, duplicates removed</dd>
+        <dt>Application</dt><dd>Lead with status Applied, Offer or Enrolled</dd>
+        <dt>CPL / CPA</dt><dd>Paid spend ÷ leads / applications</dd>
+        <dt>Click rate</dt><dd>Unique clicks ÷ delivered emails</dd>
+        <dt>Unattributed</dt><dd>Lead with no source or UTM tag</dd>
+      </dl>
+      <p class="src" style="margin-top:1.2rem">Sector data: Australian Government Department of Education, <a href="https://www.education.gov.au/undergraduate-applications-offers-and-acceptances-publications">Undergraduate applications and offers 2025</a>, CC BY 4.0.</p>
+    </div>
+  </div>
+</section>
+</main>
+<footer><div class="wrap"><span>Analysis by <a href="https://arzookhokhar.github.io">Arzoo</a></span><span>Sector data © Commonwealth of Australia, CC BY 4.0</span></div></footer>
+
+<script>
+const D={"market": {"kpis": {"applicants": 318629, "applicants_growth": 5.4, "offers": 270179, "offers_growth": 5.4, "offer_rate": 85, "wa_growth": -0.2, "propensity": 53.0, "propensity_peak": 59.1}, "national": [{"year": 2010, "applicants": 292854, "offers": 234999, "offer_rate_pct": 80}, {"year": 2011, "applicants": 302472, "offers": 244431, "offer_rate_pct": 81}, {"year": 2012, "applicants": 309639, "offers": 256472, "offer_rate_pct": 83}, {"year": 2013, "applicants": 316607, "offers": 267244, "offer_rate_pct": 84}, {"year": 2014, "applicants": 324877, "offers": 272155, "offer_rate_pct": 84}, {"year": 2015, "applicants": 333514, "offers": 280672, "offer_rate_pct": 84}, {"year": 2016, "applicants": 341421, "offers": 285846, "offer_rate_pct": 84}, {"year": 2017, "applicants": 346800, "offers": 286216, "offer_rate_pct": 83}, {"year": 2018, "applicants": 335100, "offers": 280733, "offer_rate_pct": 84}, {"year": 2019, "applicants": 330608, "offers": 276489, "offer_rate_pct": 84}, {"year": 2020, "applicants": 327332, "offers": 273504, "offer_rate_pct": 83}, {"year": 2021, "applicants": 341983, "offers": 280662, "offer_rate_pct": 82}, {"year": 2022, "applicants": 317190, "offers": 263555, "offer_rate_pct": 83}, {"year": 2023, "applicants": 300111, "offers": 250551, "offer_rate_pct": 84}, {"year": 2024, "applicants": 302254, "offers": 256226, "offer_rate_pct": 85}, {"year": 2025, "applicants": 318629, "offers": 270179, "offer_rate_pct": 85}], "fields": [{"field": "Health", "offers_2025": 63600, "share_atar_90_plus_pct": 8.6, "share_no_atar_or_non_year12_pct": 66.9}, {"field": "Society and Culture", "offers_2025": 58364, "share_atar_90_plus_pct": 11.7, "share_no_atar_or_non_year12_pct": 60.7}, {"field": "Management and Commerce", "offers_2025": 32946, "share_atar_90_plus_pct": 13.6, "share_no_atar_or_non_year12_pct": 52.2}, {"field": "Natural and Physical Sciences", "offers_2025": 30291, "share_atar_90_plus_pct": 19.4, "share_no_atar_or_non_year12_pct": 52.8}, {"field": "Education", "offers_2025": 25056, "share_atar_90_plus_pct": 1.8, "share_no_atar_or_non_year12_pct": 76.5}, {"field": "Engineering", "offers_2025": 21547, "share_atar_90_plus_pct": 24.0, "share_no_atar_or_non_year12_pct": 43.0}, {"field": "Creative Arts", "offers_2025": 15050, "share_atar_90_plus_pct": 6.8, "share_no_atar_or_non_year12_pct": 55.9}, {"field": "Information Technology", "offers_2025": 10770, "share_atar_90_plus_pct": 8.7, "share_no_atar_or_non_year12_pct": 60.9}, {"field": "Architecture and Building", "offers_2025": 8044, "share_atar_90_plus_pct": 8.2, "share_no_atar_or_non_year12_pct": 52.1}, {"field": "Agriculture", "offers_2025": 4475, "share_atar_90_plus_pct": 3.8, "share_no_atar_or_non_year12_pct": 72.2}], "field_growth": [{"field": "Education", "applications_growth_pct": 12.0, "offers_growth_pct": 11.6}, {"field": "Engineering", "applications_growth_pct": 8.6, "offers_growth_pct": 8.5}, {"field": "Management and Commerce", "applications_growth_pct": 8.6, "offers_growth_pct": 9.1}, {"field": "Natural and Physical Sciences", "applications_growth_pct": 6.5, "offers_growth_pct": 8.9}, {"field": "Health", "applications_growth_pct": 6.3, "offers_growth_pct": ""}, {"field": "Architecture and Building", "applications_growth_pct": 6.3, "offers_growth_pct": 5.7}], "states": [{"state": "NT", "applications_growth_pct": 11.4, "offers_growth_pct": 8.7}, {"state": "TAS", "applications_growth_pct": 9.0, "offers_growth_pct": NaN}, {"state": "VIC", "applications_growth_pct": 6.8, "offers_growth_pct": 6.0}, {"state": "NSW", "applications_growth_pct": 6.2, "offers_growth_pct": 6.7}, {"state": "QLD", "applications_growth_pct": 5.9, "offers_growth_pct": 6.2}, {"state": "SA", "applications_growth_pct": -0.5, "offers_growth_pct": 0.4}, {"state": "WA", "applications_growth_pct": -0.2, "offers_growth_pct": -0.5}, {"state": "Australia", "applications_growth_pct": 5.4, "offers_growth_pct": 5.0}], "cycle": [{"year": 1989, "applications_change_pct": 6.2, "unemployment_change_pts_lagged": -1.03}, {"year": 1990, "applications_change_pct": 0.5, "unemployment_change_pts_lagged": -1.12}, {"year": 1991, "applications_change_pct": 7.0, "unemployment_change_pts_lagged": 1.27}, {"year": 1992, "applications_change_pct": 9.5, "unemployment_change_pts_lagged": 2.58}, {"year": 1993, "applications_change_pct": 7.1, "unemployment_change_pts_lagged": 0.93}, {"year": 1994, "applications_change_pct": -4.4, "unemployment_change_pts_lagged": 0.26}, {"year": 1995, "applications_change_pct": 1.7, "unemployment_change_pts_lagged": -1.54}, {"year": 1996, "applications_change_pct": -5.9, "unemployment_change_pts_lagged": -1.12}, {"year": 1997, "applications_change_pct": -4.5, "unemployment_change_pts_lagged": 0.41}, {"year": 1998, "applications_change_pct": -4.7, "unemployment_change_pts_lagged": -0.26}, {"year": 1999, "applications_change_pct": 1.2, "unemployment_change_pts_lagged": -0.71}, {"year": 2000, "applications_change_pct": 2.0, "unemployment_change_pts_lagged": -0.85}, {"year": 2001, "applications_change_pct": -2.1, "unemployment_change_pts_lagged": -0.85}, {"year": 2002, "applications_change_pct": 6.2, "unemployment_change_pts_lagged": 0.83}, {"year": 2003, "applications_change_pct": 3.0, "unemployment_change_pts_lagged": -0.52}, {"year": 2004, "applications_change_pct": -0.4, "unemployment_change_pts_lagged": -0.54}, {"year": 2005, "applications_change_pct": -3.0, "unemployment_change_pts_lagged": -0.29}, {"year": 2006, "applications_change_pct": -1.4, "unemployment_change_pts_lagged": -0.62}, {"year": 2007, "applications_change_pct": 0.0, "unemployment_change_pts_lagged": -0.19}, {"year": 2008, "applications_change_pct": -1.1, "unemployment_change_pts_lagged": -0.41}, {"year": 2009, "applications_change_pct": 5.2, "unemployment_change_pts_lagged": -0.29}, {"year": 2010, "applications_change_pct": 7.0, "unemployment_change_pts_lagged": 1.69}, {"year": 2011, "applications_change_pct": 3.3, "unemployment_change_pts_lagged": -0.69}, {"year": 2012, "applications_change_pct": 2.4, "unemployment_change_pts_lagged": 0.23}, {"year": 2013, "applications_change_pct": 2.3, "unemployment_change_pts_lagged": -0.12}, {"year": 2014, "applications_change_pct": 2.6, "unemployment_change_pts_lagged": 0.68}, {"year": 2015, "applications_change_pct": 3.2, "unemployment_change_pts_lagged": 0.31}, {"year": 2016, "applications_change_pct": 1.7, "unemployment_change_pts_lagged": 0.0}, {"year": 2017, "applications_change_pct": 1.6, "unemployment_change_pts_lagged": -0.48}, {"year": 2018, "applications_change_pct": -2.6, "unemployment_change_pts_lagged": -0.1}, {"year": 2019, "applications_change_pct": -1.3, "unemployment_change_pts_lagged": -0.25}, {"year": 2020, "applications_change_pct": 0.9, "unemployment_change_pts_lagged": -0.1}, {"year": 2021, "applications_change_pct": 2.3, "unemployment_change_pts_lagged": 1.6}, {"year": 2022, "applications_change_pct": -7.2, "unemployment_change_pts_lagged": -2.3}, {"year": 2023, "applications_change_pct": -5.4, "unemployment_change_pts_lagged": -1.0}, {"year": 2024, "applications_change_pct": 0.7, "unemployment_change_pts_lagged": 0.2}, {"year": 2025, "applications_change_pct": 5.4, "unemployment_change_pts_lagged": 0.4}], "cycle_r": 0.6, "propensity": [{"year": 2010, "propensity_pct": 56.0}, {"year": 2011, "propensity_pct": 57.7}, {"year": 2012, "propensity_pct": 58.6}, {"year": 2013, "propensity_pct": 59.1}, {"year": 2014, "propensity_pct": 58.2}, {"year": 2015, "propensity_pct": 58.3}, {"year": 2016, "propensity_pct": 56.1}, {"year": 2017, "propensity_pct": 57.5}, {"year": 2018, "propensity_pct": 56.5}, {"year": 2019, "propensity_pct": 55.7}, {"year": 2020, "propensity_pct": 57.3}, {"year": 2021, "propensity_pct": 52.7}, {"year": 2022, "propensity_pct": 52.7}, {"year": 2023, "propensity_pct": 51.7}, {"year": 2024, "propensity_pct": 51.4}, {"year": 2025, "propensity_pct": 53.0}], "wa": {"Nursing": {"years": [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025], "wa_apps": [1774, 1765, 1790, 1931, 2183, 2773, 2943, 3144, 3179, 3094, 4126, 3474, 3659, 3540, 3735], "wa_offers": [1472, 1134, 1443, 1527, 1766, 2214, 2111, 2091, 1929, 1973, 1903, 1888, 2443, 2432, 2477], "wa_index": [100.0, 99.5, 100.9, 108.9, 123.1, 156.3, 165.9, 177.2, 179.2, 174.4, 232.6, 195.8, 206.3, 199.5, 210.5], "au_index": [100.0, 101.6, 103.2, 113.7, 127.4, 143.3, 148.1, 150.6, 148.7, 150.5, 181.1, 147.3, 137.2, 132.7, 135.7], "wa_growth": 5.5, "au_growth": 2.3, "wa_offer_rate": 66.3, "au_offer_rate": 75.6, "wa_share": 11.4}, "Initial Teacher Education": {"years": [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025], "wa_apps": [2477, 2460, 2576, 2487, 2327, 2579, 2946, 2765, 2667, 2701, 3005, 3037, 2869, 2485, 2509], "wa_offers": [2087, 1605, 2131, 2085, 1966, 2167, 2409, 2263, 2089, 2115, 2310, 2265, 2297, 2082, 2143], "wa_index": [100.0, 99.3, 104.0, 100.4, 93.9, 104.1, 118.9, 111.6, 107.7, 109.0, 121.3, 122.6, 115.8, 100.3, 101.3], "au_index": [100.0, 104.2, 103.9, 101.1, 99.6, 95.5, 97.4, 88.8, 87.5, 87.2, 87.6, 93.4, 85.8, 82.2, 92.2], "wa_growth": 1.0, "au_growth": 12.3, "wa_offer_rate": 85.4, "au_offer_rate": 82.8, "wa_share": 9.6}}, "insights": [{"tag": "Sector data", "impact": "High", "title": "WA demand is flat while the nation grows", "body": "Applications grew 5.4% nationally in 2025 but fell 0.2% in WA. Growth for a WA university has to come from winning share, so campaign targeting and conversion matter more than reach."}, {"tag": "Sector data", "impact": "High", "title": "Target career changers for Education", "body": "Education had the fastest application growth (+12.0%), and 76.5% of its offers went to applicants without an ATAR or not in Year 12. Mature-age audiences deserve their own creative and channels."}, {"tag": "Sector data", "impact": "Medium", "title": "WA Nursing is outperforming", "body": "WA Nursing applications rose 5.5% in 2025 against 2.3% nationally, yet only 66.3% of WA applicants received an offer (75.6% nationally). Demand exceeds places: focus spend on conversion and on pathway courses for applicants who miss out."}, {"tag": "Sector data", "impact": "Medium", "title": "WA Teaching is lagging the national surge", "body": "Teaching applications jumped 12.3% nationally but only 1.0% in WA. There is untapped demand to unlock with targeted campaigns."}, {"tag": "Sector data", "impact": "Medium", "title": "Plan budgets around the job market", "body": "Since 1989, changes in applications move with the prior year's change in unemployment (correlation r = 0.6). Use labour market forecasts when setting next year's acquisition targets."}], "checks": [{"area": "Sector data", "check": "Nursing 2025: state rows vs published total", "found": "32,813 vs 32,979 (-0.5%)", "action": "Within 1% tolerance, accepted", "severity": "low"}, {"area": "Sector data", "check": "Initial Teacher Education 2025: state rows vs published total", "found": "26,226 vs 26,296 (-0.3%)", "action": "Within 1% tolerance, accepted", "severity": "low"}, {"area": "Sector data", "check": "Field offers sum to national total", "found": "270,143 of 270,179 (minor fields not shown)", "action": "Accepted, 99.99% coverage", "severity": "low"}]}, "totals": {"spend": 174659, "leads": 8487, "applications": 2433, "enrolments": 1096}, "channels": [{"channel": "Organic Search", "sessions": 126306, "leads": 2233, "applications": 555, "enrolments": 269, "spend": 0, "conv": 1.88, "cpl": null, "cpa": null}, {"channel": "Email", "sessions": 51198, "leads": 1958, "applications": 689, "enrolments": 314, "spend": 0, "conv": 4.02, "cpl": null, "cpa": null}, {"channel": "Paid Search", "sessions": 74715, "leads": 1853, "applications": 574, "enrolments": 240, "spend": 93157, "conv": 2.64, "cpl": 50.27, "cpa": 162.29}, {"channel": "Direct/Referral", "sessions": 50299, "leads": 1037, "applications": 334, "enrolments": 138, "spend": 0, "conv": 2.17, "cpl": null, "cpa": null}, {"channel": "Paid Social", "sessions": 106981, "leads": 914, "applications": 136, "enrolments": 75, "spend": 81502, "conv": 0.92, "cpl": 89.17, "cpa": 599.28}], "weekly": {"weeks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "enquiries": {"Direct/Referral": [93, 83, 89, 96, 85, 64, 91, 111, 90, 98, 94, 98], "Email": [119, 110, 123, 137, 135, 133, 185, 225, 252, 222, 218, 201], "Organic Search": [186, 188, 201, 202, 208, 198, 183, 180, 236, 226, 180, 191], "Paid Search": [152, 173, 165, 153, 165, 149, 134, 137, 193, 196, 156, 202], "Paid Social": [113, 102, 84, 116, 80, 83, 58, 67, 90, 80, 61, 47]}, "cpl": {"Paid Search": [50.38, 43.1, 48.65, 49.17, 46.68, 50.8, 58.13, 54.59, 43.72, 42.59, 48.72, 37.45], "Paid Social": [58.34, 66.89, 82.27, 56.32, 84.3, 79.1, 116.88, 101.09, 78.59, 90.68, 112.62, 140.09]}}, "funnel": [{"stage": "Enquiry", "count": 8487}, {"stage": "Applied", "count": 2433}, {"stage": "Offer", "count": 1702}, {"stage": "Enrolled", "count": 1096}], "email": [{"journey": "Open day invite", "sends": 53089, "open": 43.3, "ctr": 9.0, "ctor": 20.8, "unsub": 0.42}, {"journey": "Application reminder", "sends": 162341, "open": 38.7, "ctr": 8.92, "ctor": 23.1, "unsub": 0.64}, {"journey": "Welcome nurture", "sends": 162759, "open": 48.3, "ctr": 6.92, "ctor": 14.3, "unsub": 0.24}, {"journey": "Course explorer", "sends": 148909, "open": 41.3, "ctr": 5.64, "ctor": 13.7, "unsub": 0.3}], "email_trend": {"weeks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "ctr": [6.72, 6.31, 6.38, 6.19, 6.62, 6.69, 8.06, 8.17, 8.38, 8.41, 7.74, 8.21]}, "ab": {"a": {"name": "A: Enquire now", "visitors": 12182, "conv": 401, "rate": 3.29}, "b": {"name": "B: Get your course guide", "visitors": 12027, "conv": 493, "rate": 4.1}, "lift": 24.5, "p": 0.0009, "z": 3.33, "ci": [0.33, 1.28], "significant": true, "days": ["2026-08-03", "2026-08-04", "2026-08-05", "2026-08-06", "2026-08-07", "2026-08-08", "2026-08-09", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-15", "2026-08-16", "2026-08-17", "2026-08-18", "2026-08-19", "2026-08-20", "2026-08-21", "2026-08-22", "2026-08-23", "2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28", "2026-08-29", "2026-08-30"], "cum": {"A: Enquire now": [3.12, 3.65, 3.8, 3.76, 3.5, 3.63, 3.54, 3.63, 3.42, 3.37, 3.26, 3.28, 3.24, 3.22, 3.22, 3.2, 3.23, 3.21, 3.22, 3.2, 3.23, 3.25, 3.22, 3.33, 3.38, 3.4, 3.34, 3.29], "B: Get your course guide": [2.58, 4.07, 3.78, 3.92, 4.0, 4.0, 4.11, 4.32, 4.17, 4.2, 4.13, 4.37, 4.36, 4.38, 4.32, 4.28, 4.15, 4.11, 4.16, 4.18, 4.12, 4.11, 4.12, 4.1, 4.17, 4.15, 4.13, 4.1]}, "monthly_visitors": 25938}, "audit": [{"area": "Ad spend", "check": "Inconsistent channel names", "found": "6 names for 2 channels", "action": "Mapped to standard names", "severity": "medium"}, {"area": "Ad spend", "check": "Zero or negative spend", "found": "0 rows", "action": "None needed", "severity": "low"}, {"area": "CRM", "check": "Duplicate enquiries", "found": "297 duplicate records (3.4%)", "action": "Kept first record", "severity": "high"}, {"area": "CRM", "check": "Inconsistent source values", "found": "12 spellings for 5 channels", "action": "Mapped to standard names", "severity": "medium"}, {"area": "CRM", "check": "Missing UTM / source", "found": "492 leads (5.8%)", "action": "Labelled Unattributed; fix tagging", "severity": "high"}, {"area": "Email", "check": "Impossible metrics (clicks > opens)", "found": "3 sends", "action": "Excluded from rates; raise with platform", "severity": "medium"}, {"area": "Web analytics", "check": "Missing days of data", "found": "0 channel-days", "action": "None needed", "severity": "low"}, {"area": "Reconciliation", "check": "Web enquiries vs CRM leads", "found": "Largest gap -6.8% (Paid Social)", "action": "Gap explained by unattributed leads", "severity": "high"}, {"area": "Sector data", "check": "Nursing 2025: state rows vs published total", "found": "32,813 vs 32,979 (-0.5%)", "action": "Within 1% tolerance, accepted", "severity": "low"}, {"area": "Sector data", "check": "Initial Teacher Education 2025: state rows vs published total", "found": "26,226 vs 26,296 (-0.3%)", "action": "Within 1% tolerance, accepted", "severity": "low"}, {"area": "Sector data", "check": "Field offers sum to national total", "found": "270,143 of 270,179 (minor fields not shown)", "action": "Accepted, 99.99% coverage", "severity": "low"}], "recon": [{"channel": "Direct/Referral", "web": 1092, "crm": 1037, "diff": -5.0}, {"channel": "Email", "web": 2060, "crm": 1958, "diff": -5.0}, {"channel": "Organic Search", "web": 2379, "crm": 2233, "diff": -6.1}, {"channel": "Paid Search", "web": 1975, "crm": 1853, "diff": -6.2}, {"channel": "Paid Social", "web": 981, "crm": 914, "diff": -6.8}], "unattributed": 492, "recs": [{"title": "Shift budget toward Paid Search", "body": "Paid Search costs $162 per application versus $599 for Paid Social. Moving 20% of Paid Social budget would buy more applications for the same spend.", "impact": "High", "tag": "Campaign data (simulated)"}, {"title": "Refresh Paid Social creative", "body": "Paid Social cost per lead rose 60% from weeks 1\u20134 ($66) to weeks 9\u201312 ($105), a typical sign of ad fatigue. Rotate new creative every 3\u20134 weeks.", "impact": "High", "tag": "Campaign data (simulated)"}, {"title": "Roll out course page variant B", "body": "'Get your course guide' converted at 4.1% vs 3.29% (+24.5%, p = 0.0009). At current traffic that is about 210 extra enquiries a month.", "impact": "High", "tag": "Campaign data (simulated)"}, {"title": "Review frequency of Application reminder", "body": "Application reminder drives strong clicks (8.92% click rate) but has the highest unsubscribe rate (0.64%). Test fewer sends or a preference centre to protect the database.", "impact": "Medium", "tag": "Campaign data (simulated)"}, {"title": "Fix UTM tagging on enquiry forms", "body": "492 leads (5.8%) have no source, so their campaign impact can't be measured. Add a shared UTM naming convention and a hidden source field on every form.", "impact": "Medium", "tag": "Campaign data (simulated)"}]}, M=D.market;
+const $=id=>document.getElementById(id), fmt=n=>Math.round(n).toLocaleString('en-AU'), aud=n=>'$'+fmt(n);
+const C={navy:'#0F5C73',blue:'#3D8FC6',teal:'#3E8E5E',amber:'#D49A1E',red:'#D9573B',grey:'#B5B9BE',light:'#9FD3CF',plum:'#7A4C8F',rose:'#C2416B',aqua:'#24A39A'};
+const FC={};
+const PAL=['#0F5C73','#24A39A','#3D8FC6','#D49A1E','#D9573B','#7A4C8F','#C2416B','#3E8E5E','#E38B2C','#5B6FB5'];
+const CH={"Paid Search":C.blue,"Paid Social":C.rose,"Email":C.amber,"Organic Search":C.teal,"Direct/Referral":C.plum};
+const dir=v=>v>0.05?'up':v<-0.05?'down':'flat', arrow=v=>v>0.05?'▲':v<-0.05?'▼':'■', sgn=v=>(v>0?'+':'')+v;
+
+/* tabs */
+const panels=[...document.querySelectorAll('[role=tabpanel]')],tabs=$('tabs'),drawn={};
+panels.forEach((p,i)=>{const b=document.createElement('button');b.setAttribute('role','tab');b.id='t-'+p.id;b.innerHTML=p.dataset.label;b.setAttribute('aria-controls',p.id);
+  b.setAttribute('aria-selected',i===0);b.tabIndex=i===0?0:-1;p.setAttribute('aria-labelledby',b.id);b.onclick=()=>show(i);tabs.appendChild(b)});
+function show(i){panels.forEach((p,k)=>{p.hidden=k!==i;tabs.children[k].setAttribute('aria-selected',k===i);tabs.children[k].tabIndex=k===i?0:-1});draw(panels[i].id)}
+tabs.addEventListener('keydown',e=>{const i=[...tabs.children].findIndex(b=>b.getAttribute('aria-selected')==='true');let j=i;
+  if(e.key==='ArrowRight')j=(i+1)%panels.length;else if(e.key==='ArrowLeft')j=(i-1+panels.length)%panels.length;else return;show(j);tabs.children[j].focus()});
+
+/* overview */
+const K=M.kpis;
+const kpi=(l,v,d,dv)=>`<div class="num"><div class="l">${l}</div><div class="v">${v}</div><div class="d ${dir(dv)}">${d}</div></div>`;
+$('mkpis').innerHTML=kpi('Applicants',fmt(K.applicants),`${arrow(K.applicants_growth)} ${sgn(K.applicants_growth)}% on 2024`,K.applicants_growth)+
+ kpi('Offers',fmt(K.offers),`${arrow(K.offers_growth)} ${sgn(K.offers_growth)}% on 2024`,K.offers_growth)+
+ kpi('Offer rate',K.offer_rate+'%','Highest since 2010',0)+
+ kpi('WA applications',sgn(K.wa_growth)+'%',`${arrow(K.wa_growth)} vs ${sgn(K.applicants_growth)}% nationally`,K.wa_growth);
+const allIns=[...M.insights,...D.recs.slice(0,3)];
+$('insights').innerHTML=allIns.map(r=>{const real=r.tag==='Sector data';return `<li class="${real?'':'sim'}"><span class="who ${real?'':'sim'}">${real?'Sector data':'Campaign (simulated)'}, ${r.impact.toLowerCase()} impact</span><h3>${r.title}</h3><p>${r.body}</p></li>`}).join('');
+
+/* WA */
+$('waGrid').innerHTML=Object.entries(M.wa).map(([k,w],i)=>`<figure class="fig"><figcaption><h3>${k}</h3><p>WA against Australia, applications indexed to 2011</p></figcaption>
+ <div class="mini"><span>WA growth 2025 <b class="${dir(w.wa_growth)}">${sgn(w.wa_growth)}%</b></span><span>National <b>${sgn(w.au_growth)}%</b></span><span>WA offer rate <b>${w.wa_offer_rate}%</b> (national ${w.au_offer_rate}%)</span></div>
+ <div class="chart"><canvas id="cWa${i}"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025. WA is ${w.wa_share}% of national applications.</p></figure>`).join('');
+
+/* campaign */
+const T=D.totals,paid=D.channels.filter(c=>c.spend),paidApps=paid.reduce((s,c)=>s+c.applications,0);
+$('ckpis').innerHTML=kpi('Paid spend',aud(T.spend),'12 weeks',0)+kpi('Enquiries',fmt(T.leads),'Unique leads',0)+
+ kpi('Applications',fmt(T.applications),`${(T.applications/T.leads*100).toFixed(1)}% of enquiries`,0)+kpi('Cost per application',aud(T.spend/paidApps),'Paid channels',0);
+const lo=Math.min(...paid.map(c=>c.cpa)),hi=Math.max(...paid.map(c=>c.cpa));
+$('tChannels').innerHTML='<tr><th>Channel</th><th class="n">Sessions</th><th class="n">Conversion</th><th class="n">Leads</th><th class="n">Applications</th><th class="n">Enrolments</th><th class="n">Spend</th><th class="n">CPL</th><th class="n">CPA</th></tr>'+
+ D.channels.map(c=>`<tr><td>${c.channel}</td><td class="n">${fmt(c.sessions)}</td><td class="n">${c.conv}%</td><td class="n">${fmt(c.leads)}</td><td class="n">${fmt(c.applications)}</td><td class="n">${fmt(c.enrolments)}</td><td class="n">${c.spend?aud(c.spend):'–'}</td><td class="n">${c.cpl?aud(c.cpl):'–'}</td><td class="n ${c.cpa===lo?'good':c.cpa===hi?'bad':''}">${c.cpa?aud(c.cpa):'–'}</td></tr>`).join('')+
+ `<tr><td>Unattributed</td><td class="n">–</td><td class="n">–</td><td class="n">${fmt(D.unattributed)}</td><td colspan="5" style="color:var(--muted)">No source tag; see Data quality</td></tr>`;
+
+/* email + A/B */
+const mc=Math.max(...D.email.map(e=>e.ctr)),mu=Math.max(...D.email.map(e=>e.unsub));
+$('tEmail').innerHTML='<tr><th>Journey</th><th class="n">Emails sent</th><th class="n">Open rate</th><th class="n">Click rate</th><th class="n">Click-to-open</th><th class="n">Unsubscribe</th></tr>'+
+ D.email.map(e=>`<tr><td>${e.journey}</td><td class="n">${fmt(e.sends)}</td><td class="n">${e.open}%</td><td class="n ${e.ctr===mc?'good':''}">${e.ctr.toFixed(2)}%</td><td class="n">${e.ctor}%</td><td class="n ${e.unsub===mu?'bad':''}">${e.unsub.toFixed(2)}%</td></tr>`).join('');
+const A=D.ab;
+$('variants').innerHTML=[A.a,A.b].map((v,i)=>{const win=A.significant&&((i===1)===(A.b.rate>A.a.rate));return `<div class="${win?'win':''}"><div class="l">Variant ${v.name.split(':')[0]}${win?', winner':''}</div><h4>“${v.name.split(': ')[1]}”</h4><div class="v">${v.rate}%</div><small>${fmt(v.conv)} of ${fmt(v.visitors)} visitors</small></div>`}).join('');
+$('abStats').innerHTML=`<span>Lift <b>${sgn(A.lift)}%</b></span><span>p-value <b>${A.p<0.001?'<0.001':A.p}</b></span><span>95% CI <b>${sgn(A.ci[0].toFixed(1))} to ${sgn(A.ci[1].toFixed(1))} pts</b></span>`;
+$('abVerdict').textContent=A.significant?'Statistically significant at 95% confidence and the whole interval is above zero. Recommend rolling out variant B.':'Not yet significant. Continue the test.';
+
+/* audit */
+$('tAudit').innerHTML='<tr><th>Source</th><th>Check</th><th>Result</th><th>Action</th><th>Severity</th></tr>'+
+ D.audit.map(a=>`<tr><td>${a.area}</td><td>${a.check}</td><td>${a.found}</td><td>${a.action}</td><td><span class="sev ${a.severity}">${a.severity}</span></td></tr>`).join('');
+
+/* charts */
+function draw(id){
+  if(drawn[id]||!window.Chart)return;drawn[id]=true;
+  Chart.defaults.font.family='"IBM Plex Sans","Segoe UI",sans-serif';Chart.defaults.font.size=12;Chart.defaults.color='#626B76';Chart.defaults.borderColor='#ECE9E3';
+  const o={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',align:'start',labels:{boxWidth:10,boxHeight:10,usePointStyle:true,pointStyle:'circle'}}}};
+  const nol={...o,plugins:{legend:{display:false}}};
+  const pctTick={ticks:{callback:v=>v+'%'}};
+  if(id==='p-overview'){
+    new Chart($('cNat'),{data:{labels:M.national.map(r=>r.year),datasets:[
+      {type:'bar',label:'Applicants',data:M.national.map(r=>r.applicants),backgroundColor:'#9FD3CF',borderRadius:0,yAxisID:'y'},
+      {type:'bar',label:'Offers',data:M.national.map(r=>r.offers),backgroundColor:C.navy,borderRadius:0,yAxisID:'y'},
+      {type:'line',label:'Offer rate',data:M.national.map(r=>r.offer_rate_pct),borderColor:C.amber,backgroundColor:C.amber,pointRadius:2,tension:.3,yAxisID:'y1'}]},
+      options:{...o,scales:{y:{min:0,ticks:{callback:v=>v/1000+'k'}},y1:{position:'right',min:0,max:100,grid:{display:false},ticks:{callback:v=>v+'%'}}}}});
+    new Chart($('cCycle'),{data:{labels:M.cycle.map(r=>r.year),datasets:[
+      {type:'bar',label:'Applications, % change',data:M.cycle.map(r=>r.applications_change_pct),backgroundColor:M.cycle.map(r=>r.applications_change_pct>=0?C.blue:'#9DB9DA'),yAxisID:'y'},
+      {type:'line',label:'Unemployment change (pts, lagged)',data:M.cycle.map(r=>r.unemployment_change_pts_lagged),borderColor:C.red,backgroundColor:C.red,pointRadius:0,tension:.25,yAxisID:'y1'}]},
+      options:{...o,plugins:{...o.plugins,subtitle:{display:true,text:'Correlation r = '+M.cycle_r,align:'start',color:'#22272E',font:{weight:600}}},
+        scales:{x:{ticks:{maxTicksLimit:10}},y:pctTick,y1:{position:'right',grid:{display:false}}}}});
+  }
+  if(id==='p-market'){
+    const F=M.fields;F.forEach((f,i)=>FC[f.field]=PAL[i%PAL.length]);
+    new Chart($('cFields'),{type:'bar',data:{labels:F.map(f=>f.field),datasets:[{data:F.map(f=>f.offers_2025),backgroundColor:F.map(f=>FC[f.field]),borderRadius:0}]},
+      options:{...nol,indexAxis:'y',scales:{x:{ticks:{callback:v=>v/1000+'k'}}}}});
+    const Fs=[...F].sort((a,b)=>b.share_no_atar_or_non_year12_pct-a.share_no_atar_or_non_year12_pct);
+    new Chart($('cAtar'),{type:'bar',data:{labels:Fs.map(f=>f.field),datasets:[
+      {label:'No ATAR or not Year 12',data:Fs.map(f=>f.share_no_atar_or_non_year12_pct),backgroundColor:C.plum},
+      {label:'Year 12, ATAR below 90',data:Fs.map(f=>+(100-f.share_no_atar_or_non_year12_pct-f.share_atar_90_plus_pct).toFixed(1)),backgroundColor:'#F2C46B'},
+      {label:'ATAR 90+',data:Fs.map(f=>f.share_atar_90_plus_pct),backgroundColor:C.aqua}]},
+      options:{...o,indexAxis:'y',scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%'}},y:{stacked:true}}}});
+    const G=[...M.field_growth].sort((a,b)=>b.applications_growth_pct-a.applications_growth_pct);
+    new Chart($('cGrowth'),{type:'bar',data:{labels:G.map(g=>g.field.replace('Natural and Physical Sciences','Natural & Phys. Sci.').replace('Management and Commerce','Mgmt & Commerce').replace('Architecture and Building','Architecture')),
+      datasets:[{data:G.map(g=>g.applications_growth_pct),backgroundColor:G.map(g=>FC[g.field]||C.grey),borderRadius:0}]},options:{...nol,indexAxis:'y',scales:{x:pctTick}}});
+    const S=[...M.states].sort((a,b)=>b.applications_growth_pct-a.applications_growth_pct);
+    new Chart($('cStates'),{type:'bar',data:{labels:S.map(s=>s.state),datasets:[{data:S.map(s=>s.applications_growth_pct),
+      backgroundColor:S.map(s=>s.state==='WA'?C.red:s.state==='Australia'?C.navy:s.applications_growth_pct>0?'#8CCFC8':'#F0B49E'),borderRadius:0}]},options:{...nol,scales:{y:pctTick}}});
+    new Chart($('cProp'),{type:'line',data:{labels:M.propensity.map(p=>p.year),datasets:[{data:M.propensity.map(p=>p.propensity_pct),borderColor:C.plum,backgroundColor:C.plum,tension:.3,pointRadius:2}]},
+      options:{...nol,scales:{y:{min:45,max:62,ticks:{callback:v=>v+'%'}},x:{ticks:{maxTicksLimit:8}}}}});
+  }
+  if(id==='p-wa'){
+    Object.values(M.wa).forEach((w,i)=>new Chart($('cWa'+i),{type:'line',data:{labels:w.years,datasets:[
+      {label:'WA',data:w.wa_index,borderColor:i?C.plum:C.rose,backgroundColor:i?C.plum:C.rose,borderWidth:2.5,pointRadius:2,tension:.25},
+      {label:'Australia',data:w.au_index,borderColor:C.grey,backgroundColor:C.grey,borderDash:[5,4],pointRadius:0,tension:.25}]},options:o}));
+  }
+  if(id==='p-campaign'){
+    new Chart($('cCpa'),{type:'bar',data:{labels:paid.map(c=>c.channel),datasets:[{data:paid.map(c=>c.cpa),backgroundColor:paid.map(c=>CH[c.channel]),borderRadius:0}]},options:{...nol,scales:{y:{ticks:{callback:v=>'$'+v}}}}});
+    new Chart($('cCpl'),{type:'line',data:{labels:D.weekly.weeks.map(w=>'W'+w),datasets:Object.entries(D.weekly.cpl).map(([k,v])=>({label:k,data:v,borderColor:CH[k],backgroundColor:CH[k],pointRadius:2,tension:.3}))},options:{...o,scales:{y:{ticks:{callback:v=>'$'+v}}}}});
+    new Chart($('cFunnel'),{type:'bar',data:{labels:D.funnel.map(f=>f.stage),datasets:[{data:D.funnel.map(f=>f.count),backgroundColor:[C.blue,C.aqua,C.amber,C.rose],borderRadius:0}]},
+      options:{...nol,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.raw)+' ('+(c.raw/D.funnel[0].count*100).toFixed(1)+'%)'}}}}});
+  }
+  if(id==='p-email'){
+    new Chart($('cEmail'),{type:'line',data:{labels:D.email_trend.weeks.map(w=>'W'+w),datasets:[{data:D.email_trend.ctr,borderColor:C.blue,backgroundColor:C.blue,tension:.3,
+      pointBackgroundColor:D.email_trend.weeks.map(w=>w>=7?C.amber:C.blue),pointRadius:4}]},options:{...nol,scales:{y:{ticks:{callback:v=>(+v).toFixed(1)+'%'}}}}});
+    new Chart($('cAb'),{type:'line',data:{labels:A.days.map(d=>d.slice(5)),datasets:Object.entries(A.cum).map(([k,v],i)=>({label:k,data:v,borderColor:i?C.teal:C.rose,backgroundColor:i?C.teal:C.rose,pointRadius:0,borderWidth:2.5,tension:.3}))},
+      options:{...o,scales:{y:{ticks:{callback:v=>(+v).toFixed(1)+'%'}}}}});
+  }
+  if(id==='p-quality'){
+    new Chart($('cRecon'),{type:'bar',data:{labels:D.recon.map(r=>r.channel),datasets:[{label:'Web analytics',data:D.recon.map(r=>r.web),backgroundColor:C.blue,borderRadius:0},{label:'CRM',data:D.recon.map(r=>r.crm),backgroundColor:C.amber,borderRadius:0}]},
+      options:{...o,plugins:{...o.plugins,tooltip:{callbacks:{afterBody:c=>'Gap: '+D.recon[c[0].dataIndex].diff+'%'}}}}});
+  }
+}
+draw('p-overview');
+</script>
+</body>
+</html>

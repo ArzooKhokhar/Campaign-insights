@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>University Student Recruitment Insights — Arzoo</title>
+<meta name="description" content="Higher education demand analysis using Australian Government data, plus a student recruitment campaign analytics case study.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#FBFAF7;--text:#22272E;--muted:#626B76;--faint:#949BA4;--rule:#E4E1DA;--rule-strong:#22272E;
+  --petrol:#0F5C73;--petrol-2:#3E8AA0;--pale:#C9DDE3;--gold:#D49A1E;--rust:#D9573B;--sage:#3E8E5E;--plum:#7A4C8F;--sky:#3D8FC6;--teal:#24A39A;--rose:#C2416B;
+  --sans:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;--serif:"Source Serif 4",Georgia,"Times New Roman",serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="dark"]){--bg:#FBFAF7}}
+:root[data-theme="light"]{--bg:#FBFAF7}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.55;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+a{color:var(--petrol)}
+:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+h1,h2,h3{margin:0;font-weight:600}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(1.1rem,3.5vw,2.25rem)}
+body::before{content:"";display:block;height:6px;background:linear-gradient(90deg,var(--petrol) 0 18%,var(--teal) 18% 34%,var(--sky) 34% 50%,var(--gold) 50% 66%,var(--rust) 66% 82%,var(--plum) 82% 100%)}
+header{padding:2.6rem 0 0}
+header .kicker{display:inline-block;font-size:.85rem;color:#fff;background:var(--petrol);font-weight:500;margin:0 0 .8rem;padding:.2rem .6rem;border-radius:3px}
+header h1{font-family:var(--serif);font-size:clamp(2rem,4.4vw,3.1rem);line-height:1.08;letter-spacing:-.015em;max-width:20ch}
+header .dek{font-size:1.08rem;color:var(--muted);max-width:62ch;margin:.9rem 0 0}
+header .byline{font-size:.85rem;color:var(--faint);margin:1rem 0 0}
+.tabs{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--rule);margin-top:2rem}
+.tabs .wrap{display:flex;gap:1.6rem;overflow-x:auto}
+.tabs button{flex:none;font:500 .94rem var(--sans);color:var(--muted);background:none;border:0;border-bottom:2px solid transparent;padding:.9rem 0 .75rem;cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--petrol);border-bottom:3px solid var(--petrol)}
+.tabs button:hover{color:var(--text)}
+main{padding:2.25rem 0 1rem}
+[role=tabpanel][hidden]{display:none}
+h2.sec{font-family:var(--serif);font-size:1.45rem;letter-spacing:-.01em;margin:0 0 .3rem;color:var(--petrol)}
+p.lede{color:var(--muted);margin:0 0 1.5rem;max-width:70ch}
+.figs{display:grid;gap:2.5rem 3rem;margin:0 0 3rem}
+.c2{grid-template-columns:repeat(2,minmax(0,1fr))}.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.fig{margin:0;min-width:0;border-top:3px solid var(--petrol);padding-top:.9rem}
+.figs > :nth-child(6n+2){border-top-color:var(--teal)}.figs > :nth-child(6n+3){border-top-color:var(--gold)}.figs > :nth-child(6n+4){border-top-color:var(--rust)}.figs > :nth-child(6n+5){border-top-color:var(--plum)}.figs > :nth-child(6n+6){border-top-color:var(--sky)}
+.fig h3{font-size:1rem}
+.fig figcaption p{margin:.15rem 0 1rem;font-size:.87rem;color:var(--muted)}
+.chart{position:relative;height:290px}.chart.tall{height:340px}
+.src{margin:.6rem 0 0;font-size:.78rem;color:var(--faint)}
+.src.sim::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-right:.4rem;vertical-align:0}
+.figs-note{font-size:.88rem;color:var(--muted);margin:.8rem 0 0}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:0;border-bottom:1px solid var(--rule);margin:0 0 3rem}
+.num{padding:1.1rem 1.25rem 1.15rem 0;border-top:4px solid var(--petrol)}
+.num:nth-child(2){border-top-color:var(--teal)}.num:nth-child(3){border-top-color:var(--gold)}.num:nth-child(4){border-top-color:var(--rust)}
+.num:nth-child(1) .v{color:var(--petrol)}.num:nth-child(2) .v{color:var(--teal)}.num:nth-child(3) .v{color:#B07C10}.num:nth-child(4) .v{color:var(--rust)}
+.num + .num{padding-left:1.25rem;border-left:1px solid var(--rule)}
+.num .l{font-size:.84rem;color:var(--muted)}
+.num .v{font-family:var(--serif);font-size:2.3rem;font-weight:600;line-height:1.15;margin:.15rem 0}
+.num .d{font-size:.84rem}
+.up{color:var(--sage)}.down{color:var(--rust)}.flat{color:var(--muted)}
+.findings{list-style:none;margin:0 0 3rem;padding:0;columns:2;column-gap:3rem}
+.findings li{break-inside:avoid;padding:1rem 0 1.1rem 1rem;border-left:3px solid var(--petrol);margin-bottom:1rem;background:linear-gradient(90deg,rgba(15,92,115,.06),transparent 60%)}
+.findings li.sim{border-left-color:var(--gold);background:linear-gradient(90deg,rgba(212,154,30,.08),transparent 60%)}
+.findings .who{font-size:.8rem;color:var(--petrol);font-weight:500}
+.findings .who.sim{color:#A9760D}
+.findings h3{font-size:1.02rem;margin:.2rem 0 .3rem}
+.findings p{margin:0;font-size:.92rem;color:var(--muted)}
+.note{font-size:.9rem;color:var(--muted);font-style:italic;margin:0 0 2rem;padding-left:.9rem;border-left:2px solid var(--gold)}
+.note.real{border-left-color:var(--petrol)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+th{text-align:left;font-weight:500;font-size:.8rem;color:var(--muted);padding:.5rem .6rem .5rem 0;border-bottom:1px solid var(--rule-strong);white-space:nowrap}
+td{padding:.6rem .6rem .6rem 0;border-bottom:1px solid var(--rule)}
+td.n,th.n{text-align:right}
+td.good{color:var(--sage);font-weight:600}td.bad{color:var(--rust);font-weight:600}
+.tbl{margin:0 0 3rem;border-top:3px solid var(--sky);padding-top:.9rem}
+.tbl h3{font-size:1rem}.tbl > p{margin:.15rem 0 .8rem;font-size:.87rem;color:var(--muted)}
+.sev{font-size:.8rem;font-weight:500;text-transform:capitalize}
+.sev.high{color:var(--rust)}.sev.medium{color:var(--gold)}.sev.low{color:var(--sage)}
+.ab{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:.4rem 0 1rem}
+.ab .l{font-size:.82rem;color:var(--muted)}
+.ab h4{margin:.15rem 0 .2rem;font-size:1rem;font-weight:600}
+.ab .v{font-family:var(--serif);font-size:2.4rem;font-weight:600;line-height:1.1}
+.ab .win .v{color:var(--sage)}
+.ab small{color:var(--muted)}
+.inline{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;font-size:.9rem;padding:.8rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.inline b{font-weight:600}
+.mini{display:flex;flex-wrap:wrap;gap:.3rem 1.6rem;font-size:.88rem;margin:-.4rem 0 1rem;color:var(--muted)}
+.mini b{color:var(--text);font-weight:600}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:.45rem 1.2rem;margin:0;font-size:.9rem}
+dt{font-weight:600}dd{margin:0;color:var(--muted)}
+footer{border-top:1px solid var(--rule);margin-top:1rem}
+footer .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-top:1.2rem;padding-bottom:1.6rem;font-size:.82rem;color:var(--faint)}
+@media (max-width:980px){.c2,.c3{grid-template-columns:1fr}.findings{columns:1}.nums{grid-template-columns:1fr 1fr}.num:nth-child(3){padding-left:0;border-left:0}.num:nth-child(n+3){border-top:1px solid var(--rule)}}
+@media (max-width:520px){.num .v{font-size:1.8rem}dl{grid-template-columns:1fr}.ab{gap:1rem}}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <p class="kicker">Marketing analytics case study</p>
+  <h1>Where university demand is moving, and what a campaign can do about it</h1>
+  <p class="dek">Real Australian Government data on undergraduate applications, combined with a simulated student recruitment campaign for a Perth university. Campaign figures are marked with a gold dot.</p>
+  <p class="byline">Arzoo · Data analysis in Python and pandas · 2026</p>
+</header>
+<nav class="tabs"><div class="wrap" role="tablist" id="tabs"></div></nav>
+<main class="wrap">
+
+<section role="tabpanel" id="p-overview" data-label="Summary">
+  <div class="nums" id="mkpis"></div>
+  <h2 class="sec">Findings</h2>
+  <p class="lede">Each finding is calculated from the data, not written by hand.</p>
+  <ul class="findings" id="insights"></ul>
+  <div class="figs c2">
+    <figure class="fig"><figcaption><h3>Applicants and offers, 2010–2025</h3><p>Australia, unique domestic applicants</p></figcaption><div class="chart "><canvas id="cNat"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+    <figure class="fig"><figcaption><h3>Applications follow the job market</h3><p>Annual change in applications against the prior year's change in unemployment</p></figcaption><div class="chart "><canvas id="cCycle"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+  </div>
+</section>
+
+<section role="tabpanel" id="p-market" data-label="Course demand" hidden>
+  <h2 class="sec">Course demand</h2>
+  <p class="lede">Which fields attract the most applicants, which are growing, and who receives the offers.</p>
+  <div class="figs c2">
+    <figure class="fig"><figcaption><h3>Offers by field of education, 2025</h3><p>Most recent offer per applicant; each field keeps its colour across charts</p></figcaption><div class="chart tall"><canvas id="cFields"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+    <figure class="fig"><figcaption><h3>Who receives offers</h3><p>Share of 2025 offers by applicant type</p></figcaption><div class="chart tall"><canvas id="cAtar"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+  </div>
+  <div class="figs c3">
+    <figure class="fig"><figcaption><h3>Fastest-growing fields</h3><p>Change in applications, 2024 to 2025</p></figcaption><div class="chart "><canvas id="cGrowth"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+    <figure class="fig"><figcaption><h3>Applications by state</h3><p>Change, 2024 to 2025</p></figcaption><div class="chart "><canvas id="cStates"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+    <figure class="fig"><figcaption><h3>Year 12 propensity to apply</h3><p>Share of Year 12 students who apply</p></figcaption><div class="chart "><canvas id="cProp"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025</p></figure>
+  </div>
+</section>
+
+<section role="tabpanel" id="p-wa" data-label="Western Australia" hidden>
+  <h2 class="sec">Western Australia</h2>
+  <p class="lede">The report breaks down Nursing and Teaching by state, so these are the two markets where WA can be compared directly with the nation. Applications indexed to 2011 = 100.</p>
+  <div class="figs c2" id="waGrid"></div>
+</section>
+
+<section role="tabpanel" id="p-campaign" data-label="Campaign" hidden>
+  <h2 class="sec">Campaign performance</h2>
+  <p class="note">Universities don't publish campaign data, so this section uses simulated exports for a fictional Perth university's 12-week intake campaign.</p>
+  <div class="nums" id="ckpis"></div>
+  <div class="tbl"><h3>Channel performance</h3><p>Lowest paid cost per application in green, highest in red</p><div class="scroll"><table id="tChannels"></table></div><p class="src sim">Simulated campaign data</p></div>
+  <div class="figs c3">
+    <figure class="fig"><figcaption><h3>Cost per application</h3><p>Paid channels, AUD</p></figcaption><div class="chart "><canvas id="cCpa"></canvas></div><p class="src sim">Simulated campaign data</p></figure>
+    <figure class="fig"><figcaption><h3>Cost per lead by week</h3><p>Paid Social climbs steadily: ad fatigue</p></figcaption><div class="chart "><canvas id="cCpl"></canvas></div><p class="src sim">Simulated campaign data</p></figure>
+    <figure class="fig"><figcaption><h3>Enquiry to enrolment</h3><p>De-duplicated CRM records</p></figcaption><div class="chart "><canvas id="cFunnel"></canvas></div><p class="src sim">Simulated campaign data</p></figure>
+  </div>
+</section>
+
+<section role="tabpanel" id="p-email" data-label="Email and testing" hidden>
+  <h2 class="sec">Email automation and testing</h2>
+  <p class="note">Simulated marketing automation and A/B test data.</p>
+  <div class="tbl"><h3>Automation journeys</h3><p>Rates on delivered emails; click-to-open is clicks divided by opens</p><div class="scroll"><table id="tEmail"></table></div><p class="src sim">Simulated campaign data</p></div>
+  <div class="figs c2">
+    <figure class="fig"><figcaption><h3>Email click rate by week</h3><p>Personalised content introduced from week 7</p></figcaption><div class="chart "><canvas id="cEmail"></canvas></div><p class="src sim">Simulated campaign data</p></figure>
+    <figure class="fig"><figcaption><h3>A/B test: course page call to action</h3><p>28 days, traffic split evenly</p></figcaption>
+      <div class="ab" id="variants"></div><div class="inline" id="abStats"></div><p class="figs-note" id="abVerdict"></p><p class="src sim">Simulated campaign data</p></figure>
+  </div>
+  <div class="figs"><figure class="fig"><figcaption><h3>Cumulative conversion rate</h3><p>The gap settles once enough visitors arrive</p></figcaption><div class="chart "><canvas id="cAb"></canvas></div><p class="src sim">Simulated campaign data</p></figure></div>
+</section>
+
+<section role="tabpanel" id="p-quality" data-label="Data quality" hidden>
+  <h2 class="sec">Data quality and definitions</h2>
+  <p class="lede">Checks run on every refresh before any number is reported.</p>
+  <div class="tbl"><h3>Integrity checks</h3><p>Real sector data and simulated campaign exports</p><div class="scroll"><table id="tAudit"></table></div></div>
+  <div class="figs c2">
+    <figure class="fig"><figcaption><h3>Web analytics vs CRM enquiries</h3><p>After de-duplication, by channel</p></figcaption><div class="chart "><canvas id="cRecon"></canvas></div><p class="src sim">Simulated campaign data</p></figure>
+    <div class="fig"><h3>Metric definitions</h3><p style="margin:.15rem 0 1rem;font-size:.87rem;color:var(--muted)">One definition per metric, used everywhere</p>
+      <dl>
+        <dt>Applicant</dt><dd>Unique domestic person applying for a first-semester undergraduate place</dd>
+        <dt>Offer rate</dt><dd>Applicants with an offer ÷ applicants</dd>
+        <dt>Lead</dt><dd>Unique CRM enquiry, duplicates removed</dd>
+        <dt>Application</dt><dd>Lead with status Applied, Offer or Enrolled</dd>
+        <dt>CPL / CPA</dt><dd>Paid spend ÷ leads / applications</dd>
+        <dt>Click rate</dt><dd>Unique clicks ÷ delivered emails</dd>
+        <dt>Unattributed</dt><dd>Lead with no source or UTM tag</dd>
+      </dl>
+      <p class="src" style="margin-top:1.2rem">Sector data: Australian Government Department of Education, <a href="https://www.education.gov.au/undergraduate-applications-offers-and-acceptances-publications">Undergraduate applications and offers 2025</a>, CC BY 4.0.</p>
+    </div>
+  </div>
+</section>
+</main>
+<footer><div class="wrap"><span>Analysis by <a href="https://arzookhokhar.github.io">Arzoo</a></span><span>Sector data © Commonwealth of Australia, CC BY 4.0</span></div></footer>
+
+<script>
+const D=__DATA__, M=D.market;
+const $=id=>document.getElementById(id), fmt=n=>Math.round(n).toLocaleString('en-AU'), aud=n=>'$'+fmt(n);
+const C={navy:'#0F5C73',blue:'#3D8FC6',teal:'#3E8E5E',amber:'#D49A1E',red:'#D9573B',grey:'#B5B9BE',light:'#9FD3CF',plum:'#7A4C8F',rose:'#C2416B',aqua:'#24A39A'};
+const FC={};
+const PAL=['#0F5C73','#24A39A','#3D8FC6','#D49A1E','#D9573B','#7A4C8F','#C2416B','#3E8E5E','#E38B2C','#5B6FB5'];
+const CH={"Paid Search":C.blue,"Paid Social":C.rose,"Email":C.amber,"Organic Search":C.teal,"Direct/Referral":C.plum};
+const dir=v=>v>0.05?'up':v<-0.05?'down':'flat', arrow=v=>v>0.05?'▲':v<-0.05?'▼':'■', sgn=v=>(v>0?'+':'')+v;
+
+/* tabs */
+const panels=[...document.querySelectorAll('[role=tabpanel]')],tabs=$('tabs'),drawn={};
+panels.forEach((p,i)=>{const b=document.createElement('button');b.setAttribute('role','tab');b.id='t-'+p.id;b.innerHTML=p.dataset.label;b.setAttribute('aria-controls',p.id);
+  b.setAttribute('aria-selected',i===0);b.tabIndex=i===0?0:-1;p.setAttribute('aria-labelledby',b.id);b.onclick=()=>show(i);tabs.appendChild(b)});
+function show(i){panels.forEach((p,k)=>{p.hidden=k!==i;tabs.children[k].setAttribute('aria-selected',k===i);tabs.children[k].tabIndex=k===i?0:-1});draw(panels[i].id)}
+tabs.addEventListener('keydown',e=>{const i=[...tabs.children].findIndex(b=>b.getAttribute('aria-selected')==='true');let j=i;
+  if(e.key==='ArrowRight')j=(i+1)%panels.length;else if(e.key==='ArrowLeft')j=(i-1+panels.length)%panels.length;else return;show(j);tabs.children[j].focus()});
+
+/* overview */
+const K=M.kpis;
+const kpi=(l,v,d,dv)=>`<div class="num"><div class="l">${l}</div><div class="v">${v}</div><div class="d ${dir(dv)}">${d}</div></div>`;
+$('mkpis').innerHTML=kpi('Applicants',fmt(K.applicants),`${arrow(K.applicants_growth)} ${sgn(K.applicants_growth)}% on 2024`,K.applicants_growth)+
+ kpi('Offers',fmt(K.offers),`${arrow(K.offers_growth)} ${sgn(K.offers_growth)}% on 2024`,K.offers_growth)+
+ kpi('Offer rate',K.offer_rate+'%','Highest since 2010',0)+
+ kpi('WA applications',sgn(K.wa_growth)+'%',`${arrow(K.wa_growth)} vs ${sgn(K.applicants_growth)}% nationally`,K.wa_growth);
+const allIns=[...M.insights,...D.recs.slice(0,3)];
+$('insights').innerHTML=allIns.map(r=>{const real=r.tag==='Sector data';return `<li class="${real?'':'sim'}"><span class="who ${real?'':'sim'}">${real?'Sector data':'Campaign (simulated)'}, ${r.impact.toLowerCase()} impact</span><h3>${r.title}</h3><p>${r.body}</p></li>`}).join('');
+
+/* WA */
+$('waGrid').innerHTML=Object.entries(M.wa).map(([k,w],i)=>`<figure class="fig"><figcaption><h3>${k}</h3><p>WA against Australia, applications indexed to 2011</p></figcaption>
+ <div class="mini"><span>WA growth 2025 <b class="${dir(w.wa_growth)}">${sgn(w.wa_growth)}%</b></span><span>National <b>${sgn(w.au_growth)}%</b></span><span>WA offer rate <b>${w.wa_offer_rate}%</b> (national ${w.au_offer_rate}%)</span></div>
+ <div class="chart"><canvas id="cWa${i}"></canvas></div><p class="src">Source: Department of Education, Undergraduate applications and offers 2025. WA is ${w.wa_share}% of national applications.</p></figure>`).join('');
+
+/* campaign */
+const T=D.totals,paid=D.channels.filter(c=>c.spend),paidApps=paid.reduce((s,c)=>s+c.applications,0);
+$('ckpis').innerHTML=kpi('Paid spend',aud(T.spend),'12 weeks',0)+kpi('Enquiries',fmt(T.leads),'Unique leads',0)+
+ kpi('Applications',fmt(T.applications),`${(T.applications/T.leads*100).toFixed(1)}% of enquiries`,0)+kpi('Cost per application',aud(T.spend/paidApps),'Paid channels',0);
+const lo=Math.min(...paid.map(c=>c.cpa)),hi=Math.max(...paid.map(c=>c.cpa));
+$('tChannels').innerHTML='<tr><th>Channel</th><th class="n">Sessions</th><th class="n">Conversion</th><th class="n">Leads</th><th class="n">Applications</th><th class="n">Enrolments</th><th class="n">Spend</th><th class="n">CPL</th><th class="n">CPA</th></tr>'+
+ D.channels.map(c=>`<tr><td>${c.channel}</td><td class="n">${fmt(c.sessions)}</td><td class="n">${c.conv}%</td><td class="n">${fmt(c.leads)}</td><td class="n">${fmt(c.applications)}</td><td class="n">${fmt(c.enrolments)}</td><td class="n">${c.spend?aud(c.spend):'–'}</td><td class="n">${c.cpl?aud(c.cpl):'–'}</td><td class="n ${c.cpa===lo?'good':c.cpa===hi?'bad':''}">${c.cpa?aud(c.cpa):'–'}</td></tr>`).join('')+
+ `<tr><td>Unattributed</td><td class="n">–</td><td class="n">–</td><td class="n">${fmt(D.unattributed)}</td><td colspan="5" style="color:var(--muted)">No source tag; see Data quality</td></tr>`;
+
+/* email + A/B */
+const mc=Math.max(...D.email.map(e=>e.ctr)),mu=Math.max(...D.email.map(e=>e.unsub));
+$('tEmail').innerHTML='<tr><th>Journey</th><th class="n">Emails sent</th><th class="n">Open rate</th><th class="n">Click rate</th><th class="n">Click-to-open</th><th class="n">Unsubscribe</th></tr>'+
+ D.email.map(e=>`<tr><td>${e.journey}</td><td class="n">${fmt(e.sends)}</td><td class="n">${e.open}%</td><td class="n ${e.ctr===mc?'good':''}">${e.ctr.toFixed(2)}%</td><td class="n">${e.ctor}%</td><td class="n ${e.unsub===mu?'bad':''}">${e.unsub.toFixed(2)}%</td></tr>`).join('');
+const A=D.ab;
+$('variants').innerHTML=[A.a,A.b].map((v,i)=>{const win=A.significant&&((i===1)===(A.b.rate>A.a.rate));return `<div class="${win?'win':''}"><div class="l">Variant ${v.name.split(':')[0]}${win?', winner':''}</div><h4>“${v.name.split(': ')[1]}”</h4><div class="v">${v.rate}%</div><small>${fmt(v.conv)} of ${fmt(v.visitors)} visitors</small></div>`}).join('');
+$('abStats').innerHTML=`<span>Lift <b>${sgn(A.lift)}%</b></span><span>p-value <b>${A.p<0.001?'<0.001':A.p}</b></span><span>95% CI <b>${sgn(A.ci[0].toFixed(1))} to ${sgn(A.ci[1].toFixed(1))} pts</b></span>`;
+$('abVerdict').textContent=A.significant?'Statistically significant at 95% confidence and the whole interval is above zero. Recommend rolling out variant B.':'Not yet significant. Continue the test.';
+
+/* audit */
+$('tAudit').innerHTML='<tr><th>Source</th><th>Check</th><th>Result</th><th>Action</th><th>Severity</th></tr>'+
+ D.audit.map(a=>`<tr><td>${a.area}</td><td>${a.check}</td><td>${a.found}</td><td>${a.action}</td><td><span class="sev ${a.severity}">${a.severity}</span></td></tr>`).join('');
+
+/* charts */
+function draw(id){
+  if(drawn[id]||!window.Chart)return;drawn[id]=true;
+  Chart.defaults.font.family='"IBM Plex Sans","Segoe UI",sans-serif';Chart.defaults.font.size=12;Chart.defaults.color='#626B76';Chart.defaults.borderColor='#ECE9E3';
+  const o={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',align:'start',labels:{boxWidth:10,boxHeight:10,usePointStyle:true,pointStyle:'circle'}}}};
+  const nol={...o,plugins:{legend:{display:false}}};
+  const pctTick={ticks:{callback:v=>v+'%'}};
+  if(id==='p-overview'){
+    new Chart($('cNat'),{data:{labels:M.national.map(r=>r.year),datasets:[
+      {type:'bar',label:'Applicants',data:M.national.map(r=>r.applicants),backgroundColor:'#9FD3CF',borderRadius:0,yAxisID:'y'},
+      {type:'bar',label:'Offers',data:M.national.map(r=>r.offers),backgroundColor:C.navy,borderRadius:0,yAxisID:'y'},
+      {type:'line',label:'Offer rate',data:M.national.map(r=>r.offer_rate_pct),borderColor:C.amber,backgroundColor:C.amber,pointRadius:2,tension:.3,yAxisID:'y1'}]},
+      options:{...o,scales:{y:{min:0,ticks:{callback:v=>v/1000+'k'}},y1:{position:'right',min:0,max:100,grid:{display:false},ticks:{callback:v=>v+'%'}}}}});
+    new Chart($('cCycle'),{data:{labels:M.cycle.map(r=>r.year),datasets:[
+      {type:'bar',label:'Applications, % change',data:M.cycle.map(r=>r.applications_change_pct),backgroundColor:M.cycle.map(r=>r.applications_change_pct>=0?C.blue:'#9DB9DA'),yAxisID:'y'},
+      {type:'line',label:'Unemployment change (pts, lagged)',data:M.cycle.map(r=>r.unemployment_change_pts_lagged),borderColor:C.red,backgroundColor:C.red,pointRadius:0,tension:.25,yAxisID:'y1'}]},
+      options:{...o,plugins:{...o.plugins,subtitle:{display:true,text:'Correlation r = '+M.cycle_r,align:'start',color:'#22272E',font:{weight:600}}},
+        scales:{x:{ticks:{maxTicksLimit:10}},y:pctTick,y1:{position:'right',grid:{display:false}}}}});
+  }
+  if(id==='p-market'){
+    const F=M.fields;F.forEach((f,i)=>FC[f.field]=PAL[i%PAL.length]);
+    new Chart($('cFields'),{type:'bar',data:{labels:F.map(f=>f.field),datasets:[{data:F.map(f=>f.offers_2025),backgroundColor:F.map(f=>FC[f.field]),borderRadius:0}]},
+      options:{...nol,indexAxis:'y',scales:{x:{ticks:{callback:v=>v/1000+'k'}}}}});
+    const Fs=[...F].sort((a,b)=>b.share_no_atar_or_non_year12_pct-a.share_no_atar_or_non_year12_pct);
+    new Chart($('cAtar'),{type:'bar',data:{labels:Fs.map(f=>f.field),datasets:[
+      {label:'No ATAR or not Year 12',data:Fs.map(f=>f.share_no_atar_or_non_year12_pct),backgroundColor:C.plum},
+      {label:'Year 12, ATAR below 90',data:Fs.map(f=>+(100-f.share_no_atar_or_non_year12_pct-f.share_atar_90_plus_pct).toFixed(1)),backgroundColor:'#F2C46B'},
+      {label:'ATAR 90+',data:Fs.map(f=>f.share_atar_90_plus_pct),backgroundColor:C.aqua}]},
+      options:{...o,indexAxis:'y',scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%'}},y:{stacked:true}}}});
+    const G=[...M.field_growth].sort((a,b)=>b.applications_growth_pct-a.applications_growth_pct);
+    new Chart($('cGrowth'),{type:'bar',data:{labels:G.map(g=>g.field.replace('Natural and Physical Sciences','Natural & Phys. Sci.').replace('Management and Commerce','Mgmt & Commerce').replace('Architecture and Building','Architecture')),
+      datasets:[{data:G.map(g=>g.applications_growth_pct),backgroundColor:G.map(g=>FC[g.field]||C.grey),borderRadius:0}]},options:{...nol,indexAxis:'y',scales:{x:pctTick}}});
+    const S=[...M.states].sort((a,b)=>b.applications_growth_pct-a.applications_growth_pct);
+    new Chart($('cStates'),{type:'bar',data:{labels:S.map(s=>s.state),datasets:[{data:S.map(s=>s.applications_growth_pct),
+      backgroundColor:S.map(s=>s.state==='WA'?C.red:s.state==='Australia'?C.navy:s.applications_growth_pct>0?'#8CCFC8':'#F0B49E'),borderRadius:0}]},options:{...nol,scales:{y:pctTick}}});
+    new Chart($('cProp'),{type:'line',data:{labels:M.propensity.map(p=>p.year),datasets:[{data:M.propensity.map(p=>p.propensity_pct),borderColor:C.plum,backgroundColor:C.plum,tension:.3,pointRadius:2}]},
+      options:{...nol,scales:{y:{min:45,max:62,ticks:{callback:v=>v+'%'}},x:{ticks:{maxTicksLimit:8}}}}});
+  }
+  if(id==='p-wa'){
+    Object.values(M.wa).forEach((w,i)=>new Chart($('cWa'+i),{type:'line',data:{labels:w.years,datasets:[
+      {label:'WA',data:w.wa_index,borderColor:i?C.plum:C.rose,backgroundColor:i?C.plum:C.rose,borderWidth:2.5,pointRadius:2,tension:.25},
+      {label:'Australia',data:w.au_index,borderColor:C.grey,backgroundColor:C.grey,borderDash:[5,4],pointRadius:0,tension:.25}]},options:o}));
+  }
+  if(id==='p-campaign'){
+    new Chart($('cCpa'),{type:'bar',data:{labels:paid.map(c=>c.channel),datasets:[{data:paid.map(c=>c.cpa),backgroundColor:paid.map(c=>CH[c.channel]),borderRadius:0}]},options:{...nol,scales:{y:{ticks:{callback:v=>'$'+v}}}}});
+    new Chart($('cCpl'),{type:'line',data:{labels:D.weekly.weeks.map(w=>'W'+w),datasets:Object.entries(D.weekly.cpl).map(([k,v])=>({label:k,data:v,borderColor:CH[k],backgroundColor:CH[k],pointRadius:2,tension:.3}))},options:{...o,scales:{y:{ticks:{callback:v=>'$'+v}}}}});
+    new Chart($('cFunnel'),{type:'bar',data:{labels:D.funnel.map(f=>f.stage),datasets:[{data:D.funnel.map(f=>f.count),backgroundColor:[C.blue,C.aqua,C.amber,C.rose],borderRadius:0}]},
+      options:{...nol,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.raw)+' ('+(c.raw/D.funnel[0].count*100).toFixed(1)+'%)'}}}}});
+  }
+  if(id==='p-email'){
+    new Chart($('cEmail'),{type:'line',data:{labels:D.email_trend.weeks.map(w=>'W'+w),datasets:[{data:D.email_trend.ctr,borderColor:C.blue,backgroundColor:C.blue,tension:.3,
+      pointBackgroundColor:D.email_trend.weeks.map(w=>w>=7?C.amber:C.blue),pointRadius:4}]},options:{...nol,scales:{y:{ticks:{callback:v=>(+v).toFixed(1)+'%'}}}}});
+    new Chart($('cAb'),{type:'line',data:{labels:A.days.map(d=>d.slice(5)),datasets:Object.entries(A.cum).map(([k,v],i)=>({label:k,data:v,borderColor:i?C.teal:C.rose,backgroundColor:i?C.teal:C.rose,pointRadius:0,borderWidth:2.5,tension:.3}))},
+      options:{...o,scales:{y:{ticks:{callback:v=>(+v).toFixed(1)+'%'}}}}});
+  }
+  if(id==='p-quality'){
+    new Chart($('cRecon'),{type:'bar',data:{labels:D.recon.map(r=>r.channel),datasets:[{label:'Web analytics',data:D.recon.map(r=>r.web),backgroundColor:C.blue,borderRadius:0},{label:'CRM',data:D.recon.map(r=>r.crm),backgroundColor:C.amber,borderRadius:0}]},
+      options:{...o,plugins:{...o.plugins,tooltip:{callbacks:{afterBody:c=>'Gap: '+D.recon[c[0].dataIndex].diff+'%'}}}}});
+  }
+}
+draw('p-overview');
+</script>
+</body>
+</html>
